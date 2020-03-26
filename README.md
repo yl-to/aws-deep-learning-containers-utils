@@ -1,11 +1,6 @@
-## My Project
+## aws-deep-learning-containers-utils
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+It is store all the Open Source Scripts and Files used by various Deep Learning Containers.
 
 ## License
 
