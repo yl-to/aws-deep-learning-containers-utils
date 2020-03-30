@@ -10,13 +10,11 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-from __future__ import absolute_import
-
+import re
 import json
 import logging
-import re
-
 import requests
+import argparse
 
 
 def _validate_instance_id(instance_id):
@@ -69,6 +67,28 @@ def _retrieve_instance_region():
     return region
 
 
+def parse_args():
+    """Parsing function to parse input arguments.
+    Return:
+        args, which containers parsed input arguments.
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--framework",
+                        choices=["tensorflow", "mxnet", "pytorch"],
+                        help="framework of container image.",
+                        required=False)
+    parser.add_argument("--framework-version",
+                        help="framework version of container image.",
+                        required=False)
+    parser.add_argument("--python-version",
+                        choices=["py2", "py3"],
+                        help="Python version of container. Using either py2(python 2.7) \
+                                  or py3(python 3.6).",
+                        required=False)
+    args = parser.parse_args()
+
+    return args
+
 def query_bucket():
     """
     GET request on an empty object from an Amazon S3 bucket
@@ -76,10 +96,12 @@ def query_bucket():
     response = None
     instance_id = _retrieve_instance_id()
     region = _retrieve_instance_region()
+    ARGS = parse_args()
+    framework, framework_version, py_version = ARGS.framework, ARGS.framework_version, ARGS.python_version
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-               "/dlc-containers.txt?x-instance-id={1}".format(region, instance_id))
+               "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4}".format(region, instance_id, framework, framework_version, py_version))
         response = requests_helper(url, timeout=0.2)
 
     logging.debug("Query bucket finished: {}".format(response))
