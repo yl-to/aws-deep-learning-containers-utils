@@ -70,9 +70,9 @@ def _retrieve_instance_region():
 
 
 def parse_args():
-    """Parsing function to parse input arguments.
-    Return:
-        args, which containers parsed input arguments.
+    """
+    Parsing function to parse input arguments.
+    Return: args, which containers parsed input arguments.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--framework",
@@ -103,18 +103,17 @@ def query_bucket():
     response = None
     instance_id = _retrieve_instance_id()
     region = _retrieve_instance_region()
-    ARGS = parse_args()
-    framework, framework_version, job = ARGS.framework, ARGS.framework_version, ARGS.job
-    py_version = sys.version[0:5]
+    args = parse_args()
+    framework, framework_version, job = args.framework, args.framework_version, args.job
+    py_version = sys.version.split(" ")[0]
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
                "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4},job={5}".format(region, instance_id, framework, framework_version, py_version, job))
         response = requests_helper(url, timeout=0.2)
         if (os.environ.get('TEST_MODE') == str(1)):
-            f = open('/tmp/test_request.txt', "w+")
-            f.write(url)
-            f.close()
+            with open(os.path.join(os.sep, 'tmp', 'test_request.txt'), 'w+') as rf:
+                rf.write(url)
 
     logging.debug("Query bucket finished: {}".format(response))
 
