@@ -15,6 +15,8 @@ import json
 import logging
 import requests
 import argparse
+import os
+import sys
 
 
 def _validate_instance_id(instance_id):
@@ -74,20 +76,25 @@ def parse_args():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--framework",
-                        choices=["tensorflow", "mxnet", "pytorch"],
+                        choices=["tensorflow", "mxnet", "pytorch", "N/A"],
                         help="framework of container image.",
+                        default="N/A",
                         required=False)
     parser.add_argument("--framework-version",
                         help="framework version of container image.",
+                        default="N/A",
                         required=False)
-    parser.add_argument("--python-version",
-                        choices=["py2", "py3"],
-                        help="Python version of container. Using either py2(python 2.7) \
-                                  or py3(python 3.6).",
+    parser.add_argument("--job",
+                        choices=["training", "inference"],
+                        help="What kind of jobs you want to run on container. \
+                                  Either training or inference.",
+                        default="N/A",
                         required=False)
+
     args = parser.parse_args()
 
     return args
+
 
 def query_bucket():
     """
@@ -97,12 +104,17 @@ def query_bucket():
     instance_id = _retrieve_instance_id()
     region = _retrieve_instance_region()
     ARGS = parse_args()
-    framework, framework_version, py_version = ARGS.framework, ARGS.framework_version, ARGS.python_version
+    framework, framework_version, job = ARGS.framework, ARGS.framework_version, ARGS.job
+    py_version = ("py"+sys.version[0])
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-               "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4}".format(region, instance_id, framework, framework_version, py_version))
+               "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4},job={5}".format(region, instance_id, framework, framework_version, py_version, job))
         response = requests_helper(url, timeout=0.2)
+        if (os.environ.get('TEST_MODE') == str(1)):
+            f = open('/tmp/test_request.txt', "w+")
+            f.write(url)
+            f.close()
 
     logging.debug("Query bucket finished: {}".format(response))
 
