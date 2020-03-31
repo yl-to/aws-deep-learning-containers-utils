@@ -105,7 +105,7 @@ def query_bucket():
     region = _retrieve_instance_region()
     ARGS = parse_args()
     framework, framework_version, job = ARGS.framework, ARGS.framework_version, ARGS.job
-    py_version = ("py"+sys.version[0])
+    py_version = sys.version[0:5]
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
