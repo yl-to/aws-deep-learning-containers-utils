@@ -155,3 +155,4 @@ def test_timeout_error_on_S3(requests_mock, fixture_valid_region, fixture_valid_
 
 if __name__ == '__main__':
     unittest.main()
+    
