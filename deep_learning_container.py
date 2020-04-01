@@ -10,13 +10,13 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-import re
+from __future__ import absolute_import
+
 import json
 import logging
+import re
+
 import requests
-import argparse
-import os
-import sys
 
 
 def _validate_instance_id(instance_id):
@@ -106,7 +106,7 @@ def query_bucket():
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-               "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4},job={5}".format(region, instance_id, framework, framework_version, py_version, job))
+               "/dlc-containers.txt?x-instance-id={1}".format(region, instance_id))
         response = requests_helper(url, timeout=0.2)
         if (os.environ.get('TEST_MODE') == str(1)):
             with open(os.path.join(os.sep, 'tmp', 'test_request.txt'), 'w+') as rf:
