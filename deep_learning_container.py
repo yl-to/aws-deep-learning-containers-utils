@@ -89,17 +89,18 @@ def parse_args():
     Return: args, which containers parsed input arguments.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--framework", choices=["tensorflow", "mxnet", "pytorch"], help="framework of container image.", required=True
-    )
-    parser.add_argument("--framework-version", help="framework version of container image.", required=True)
-    parser.add_argument(
-        "--container-type",
-        choices=["training", "inference"],
-        help="What kind of jobs you want to run on container. \
-                                  Either training or inference.",
-        required=True,
-    )
+    parser.add_argument("--framework",
+                        choices=["tensorflow", "mxnet", "pytorch"],
+                        help="framework of container image.",
+                        required=True)
+    parser.add_argument("--framework-version",
+                        help="framework version of container image.",
+                        required=True)
+    parser.add_argument("--container-type",
+                        choices=["training", "inference"],
+                        help="What kind of jobs you want to run on container. \
+                        Either training or inference.",
+                        required=True)
 
     args = parser.parse_args()
 
