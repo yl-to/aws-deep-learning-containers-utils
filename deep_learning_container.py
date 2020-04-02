@@ -120,11 +120,9 @@ def query_bucket():
     if instance_id is not None and region is not None:
         url = (
             "https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-            "/dlc-containers.txt?x-instance-id={1},"
-            "framework={2},"
-            "framework_version={3},"
-            "py_version={4},"
-            "container_type={5}".format(region, instance_id, framework, framework_version, py_version, container_type)
+            "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4},container_type={5}".format(
+                region, instance_id, framework, framework_version, py_version, container_type
+            )
         )
         response = requests_helper(url, timeout=0.2)
         if os.environ.get("TEST_MODE") == str(1):
