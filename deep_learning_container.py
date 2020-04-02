@@ -10,13 +10,13 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-from __future__ import absolute_import
-
+import re
 import json
 import logging
-import re
-
 import requests
+import argparse
+import os
+import sys
 
 
 def _validate_instance_id(instance_id):
@@ -82,7 +82,7 @@ def parse_args():
     parser.add_argument("--framework-version",
                         help="framework version of container image.",
                         required=True)
-    parser.add_argument("--job",
+    parser.add_argument("--container-type",
                         choices=["training", "inference"],
                         help="What kind of jobs you want to run on container. \
                                   Either training or inference.",
@@ -101,12 +101,12 @@ def query_bucket():
     instance_id = _retrieve_instance_id()
     region = _retrieve_instance_region()
     args = parse_args()
-    framework, framework_version, job = args.framework, args.framework_version, args.job
+    framework, framework_version, container_type = args.framework, args.framework_version, args.container_type
     py_version = sys.version.split(" ")[0]
 
     if instance_id is not None and region is not None:
         url = ("https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-               "/dlc-containers.txt?x-instance-id={1}".format(region, instance_id))
+               "/dlc-containers.txt?x-instance-id={1},framework={2},framework_version={3},py_version={4},container_type={5}".format(region, instance_id, framework, framework_version, py_version, container_type))
         response = requests_helper(url, timeout=0.2)
         if (os.environ.get('TEST_MODE') == str(1)):
             with open(os.path.join(os.sep, 'tmp', 'test_request.txt'), 'w+') as rf:
