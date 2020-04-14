@@ -41,7 +41,7 @@ def _retrieve_instance_id():
     url = "http://169.254.169.254/latest/meta-data/instance-id"
     response = requests_helper(url, timeout=0.1)
 
-    if response is not None:
+    if response is not None and not (400 <= response.status_code < 600):
         instance_id = _validate_instance_id(response.text)
 
     return instance_id
@@ -74,7 +74,7 @@ def _retrieve_instance_region():
     url = "http://169.254.169.254/latest/dynamic/instance-identity/document"
     response = requests_helper(url, timeout=0.1)
 
-    if response is not None:
+    if response is not None and not (400 <= response.status_code < 600):
         response_json = json.loads(response.text)
 
         if response_json["region"] in valid_regions:
