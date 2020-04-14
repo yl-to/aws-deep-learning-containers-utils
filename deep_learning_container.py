@@ -102,7 +102,7 @@ def parse_args():
                         Either training or inference.",
                         required=True)
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     return args
 
