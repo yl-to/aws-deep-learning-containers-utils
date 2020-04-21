@@ -121,7 +121,7 @@ def query_bucket():
     if instance_id is not None and region is not None:
         url = (
             "https://aws-deep-learning-containers-{0}.s3.{0}.amazonaws.com"
-            "/dlc-containers.txt?x-instance-id={1}&x-framework={2}&x-framework_version={3}&x-py_version={4}&x-container_type={5}".format(
+            "/dlc-containers-{1}.txt?x-instance-id={1}&x-framework={2}&x-framework_version={3}&x-py_version={4}&x-container_type={5}".format(
                 region, instance_id, framework, framework_version, py_version, container_type
             )
         )
