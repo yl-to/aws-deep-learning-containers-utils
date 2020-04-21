@@ -1,6 +1,6 @@
 ## AWS-Deep-Learning-Containers-Utils
 
-It is store all the Open Source Scripts and Files used by various Deep Learning Containers.
+Utilities used by Deep Learning Containers (DLC)
 
 ## License
 
