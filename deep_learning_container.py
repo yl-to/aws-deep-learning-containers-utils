@@ -90,7 +90,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--framework",
-                        choices=["tensorflow", "mxnet", "pytorch"],
+                        choices=["tensorflow", "mxnet", "pytorch", "huggingface"],
                         help="framework of container image.",
                         required=True)
     parser.add_argument("--framework-version",
